@@ -1,2 +1,2 @@
 # turna
-A library for all your download needs. Written in C++. Powered by LibCurl.
+A C++ library for all your download needs. Powered by LibCurl.
