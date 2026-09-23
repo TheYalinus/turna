@@ -1,11 +1,13 @@
 #include "curl_wrapper.hpp"
 #include "range_type.hpp"
+#include "exceptions.hpp"
 #include <curl/curl.h>
+#include <curl/header.h>
 #include <curl/system.h>
 #include <string>
 #include <string_view>
-void turna::CurlWrapper::setUrl(std::string_view url){
-    curl_easy_setopt(this->Curl.get(),CURLOPT_URL,url);
+void turna::CurlWrapper::setUrl(std::string url){
+    curl_easy_setopt(this->Curl.get(),CURLOPT_URL,url.c_str());
 }
 void turna::CurlWrapper::setHeaderOnly(bool option){
     if(option)
@@ -22,8 +24,8 @@ void turna::CurlWrapper::setCurlVerbose(bool option){
 void turna::CurlWrapper::setRange(turna::RangeType range){
     curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, range.getCurlRange().c_str());
 }
-void turna::CurlWrapper::setUsrAgent(std::string_view user_agent){
-    curl_easy_setopt(this->Curl.get(), CURLOPT_USERAGENT, user_agent);
+void turna::CurlWrapper::setUsrAgent(std::string user_agent){
+    curl_easy_setopt(this->Curl.get(), CURLOPT_USERAGENT, user_agent.c_str());
 }
 void turna::CurlWrapper::setShareHandle(CURLSH * share_handle){
     curl_easy_setopt(this->Curl.get(), CURLOPT_SHARE, share_handle);
@@ -40,14 +42,14 @@ void turna::CurlWrapper::setProgress(bool option){
     else
         curl_easy_setopt(this->getRawCurl(), CURLOPT_NOPROGRESS, 1L);
 }
-void turna::CurlWrapper::setProxy(std::string_view proxy){
-    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, proxy);
+void turna::CurlWrapper::setProxy(std::string proxy){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, proxy.c_str());
 }
-void turna::CurlWrapper::setProxyPassword(std::string_view password){
-    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYPASSWORD, password);
+void turna::CurlWrapper::setProxyPassword(std::string password){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYPASSWORD, password.c_str());
 }
-void turna::CurlWrapper::setProxyUsername(std::string_view username){
-    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYUSERNAME, username);
+void turna::CurlWrapper::setProxyUsername(std::string username){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYUSERNAME, username.c_str());
 }
 void turna::CurlWrapper::disableProxy(){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, "");
@@ -59,4 +61,18 @@ long turna::CurlWrapper::getTotalSize(){
     curl_off_t total_size_buffer = 0;
     curl_easy_getinfo(this->getRawCurl(), CURLINFO_CONTENT_LENGTH_DOWNLOAD_T,&total_size_buffer);
     return total_size_buffer;
+}
+std::string turna::CurlWrapper::getEffectiveUrl(){
+    char * effective_url_buff_c;
+    curl_easy_getinfo(this->getRawCurl(), CURLINFO_EFFECTIVE_URL, &effective_url_buff_c);
+    if(effective_url_buff_c != NULL){
+        return std::string{effective_url_buff_c};
+    }
+    else {
+        throw CurlGetInfoError("Cannot get effective url");
+    }
+}
+struct curl_header turna::CurlWrapper::getHeader(std::string value){
+    struct curl_header *data;
+    curl_easy_header(this->getRawCurl(), value.c_str(), 0, CURLH_HEADER, -1, &data);
 }
