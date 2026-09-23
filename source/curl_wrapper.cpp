@@ -6,7 +6,7 @@
 #include <curl/system.h>
 #include <string>
 #include <string_view>
-void turna::CurlWrapper::setUrl(std::string url){
+void turna::CurlWrapper::setUrl(const std::string& url){
     curl_easy_setopt(this->Curl.get(),CURLOPT_URL,url.c_str());
 }
 void turna::CurlWrapper::setHeaderOnly(bool option){
@@ -21,10 +21,10 @@ void turna::CurlWrapper::setCurlVerbose(bool option){
     else
         curl_easy_setopt(this->Curl.get(), CURLOPT_VERBOSE, 0L);
 }
-void turna::CurlWrapper::setRange(turna::RangeType range){
+void turna::CurlWrapper::setRange(const turna::RangeType& range){
     curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, range.getCurlRange().c_str());
 }
-void turna::CurlWrapper::setUsrAgent(std::string user_agent){
+void turna::CurlWrapper::setUsrAgent(const std::string& user_agent){
     curl_easy_setopt(this->Curl.get(), CURLOPT_USERAGENT, user_agent.c_str());
 }
 void turna::CurlWrapper::setShareHandle(CURLSH * share_handle){
@@ -42,13 +42,13 @@ void turna::CurlWrapper::setProgress(bool option){
     else
         curl_easy_setopt(this->getRawCurl(), CURLOPT_NOPROGRESS, 1L);
 }
-void turna::CurlWrapper::setProxy(std::string proxy){
+void turna::CurlWrapper::setProxy(const std::string& proxy){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, proxy.c_str());
 }
-void turna::CurlWrapper::setProxyPassword(std::string password){
+void turna::CurlWrapper::setProxyPassword(const std::string& password){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYPASSWORD, password.c_str());
 }
-void turna::CurlWrapper::setProxyUsername(std::string username){
+void turna::CurlWrapper::setProxyUsername(const std::string& username){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYUSERNAME, username.c_str());
 }
 void turna::CurlWrapper::disableProxy(){
@@ -72,7 +72,8 @@ std::string turna::CurlWrapper::getEffectiveUrl(){
         throw CurlGetInfoError("Cannot get effective url");
     }
 }
-struct curl_header turna::CurlWrapper::getHeader(std::string value){
+struct curl_header turna::CurlWrapper::getHeader(const std::string& value){
     struct curl_header *data;
     curl_easy_header(this->getRawCurl(), value.c_str(), 0, CURLH_HEADER, -1, &data);
+    return *data;
 }
