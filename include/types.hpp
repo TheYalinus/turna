@@ -4,6 +4,6 @@ namespace turna {
     class DownloadConf{
         public:
 
-    }
+    };
 }
 #endif
