@@ -26,6 +26,18 @@ include(cmake/CPM.cmake)
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.13.0")
 
+CPMAddPackage(
+NAME json
+URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+VERSION 3.12.0
+URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
+
+CPMAddPackage(
+NAME curl
+URL https://github.com/curl/curl/releases/download/curl-8_22_0/curl-8.22.0.zip
+OPTIONS "BUILD_CURL_EXE OFF" " BUILD_EXAMPLES OFF"  "BUILD_LIBCURL_DOCS OFF" " BUILD_MISC_DOCS OFF"
+VERSION 8.22.0)
+
 # ---- Add source files ----
 
 # Note: globbing sources is considered bad practice as CMake's generators may not detect new files
@@ -46,17 +58,7 @@ target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                          $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
-CPMAddPackage(
-NAME json
-URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
-VERSION 3.12.0
-URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
 
-CPMAddPackage(
-NAME curl
-URL https://github.com/curl/curl/releases/download/curl-8_22_0/curl-8.22.0.zip
-OPTIONS "BUILD_CURL_EXE OFF" " BUILD_EXAMPLES OFF"  "BUILD_LIBCURL_DOCS OFF" " BUILD_MISC_DOCS OFF"
-VERSION 8.22.0)
 
 packageProject(
   NAME ${PROJECT_NAME}

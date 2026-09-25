@@ -2,10 +2,29 @@
 #include "range_type.hpp"
 #include "exceptions.hpp"
 #include <curl/curl.h>
+#include <curl/easy.h>
 #include <curl/header.h>
 #include <curl/system.h>
 #include <string>
 #include <string_view>
+turna::CurlWrapper::CurlWrapper(bool keep_connection, bool curl_verbose):Curl(curl_easy_init(), curl_easy_cleanup){
+    if(keep_connection)
+        this->setKeepConnection(true);
+    if(curl_verbose)
+        this->setCurlVerbose();
+}
+void turna::CurlWrapper::setFollowRedirects(bool option){
+    if(option)
+        curl_easy_setopt(this->Curl.get(),CURLOPT_FOLLOWLOCATION,1L);
+    else
+        curl_easy_setopt(this->Curl.get(),CURLOPT_FOLLOWLOCATION,0L);
+}
+turna::curlReturnType turna::CurlWrapper::executeCurl(){
+    curlReturnType result;
+    result.first = curl_easy_perform(this->getRawCurl());
+    curl_easy_getinfo(this->getRawCurl(), CURLINFO_RESPONSE_CODE, &result.second);
+    return result;
+}
 void turna::CurlWrapper::setUrl(const std::string& url){
     curl_easy_setopt(this->Curl.get(),CURLOPT_URL,url.c_str());
 }

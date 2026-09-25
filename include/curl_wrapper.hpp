@@ -10,8 +10,8 @@
 
 #include <vector>
 namespace turna {
+    using curlReturnType = std::pair <CURLcode,long>;
     class CurlWrapper{
-        using curlReturnType = std::pair <CURLcode,long>;
         public:
             CurlWrapper(bool keep_connection=true , bool curl_verbose= false);
             void setUrl(const std::string& url);
