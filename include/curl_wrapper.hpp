@@ -2,10 +2,13 @@
 #define CURL_WRAPPER_HPP
 #include "curl/curl.h"
 #include "range_type.hpp"
+#include <cstddef>
 #include <curl/easy.h>
 #include <curl/header.h>
 #include <curl/system.h>
+#include <functional>
 #include <memory>
+#include <filesystem>
 #include <string>
 
 #include <vector>
@@ -25,6 +28,8 @@ namespace turna {
             void setProxy(const std::string& proxy);
             void setProxyUsername(const std::string& username);
             void setProxyPassword(const std::string& proxy);
+            void setWriteFunction(size_t(func)(char* ,size_t, size_t ,void *));
+            void setWritePointer(void *);
             void disableProxy();
             void setProgress(bool option=true);
             void setShareHandle(CURLSH * share_handle);

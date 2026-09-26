@@ -5,6 +5,7 @@
 #include <curl/easy.h>
 #include <curl/header.h>
 #include <curl/system.h>
+#include <filesystem>
 #include <string>
 #include <string_view>
 turna::CurlWrapper::CurlWrapper(bool keep_connection, bool curl_verbose):Curl(curl_easy_init(), curl_easy_cleanup){
@@ -95,4 +96,10 @@ struct curl_header turna::CurlWrapper::getHeader(const std::string& value){
     struct curl_header *data;
     curl_easy_header(this->getRawCurl(), value.c_str(), 0, CURLH_HEADER, -1, &data);
     return *data;
+}
+void turna::CurlWrapper::setWriteFunction(size_t(*func)(char* ,size_t, size_t ,void *)){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_WRITEFUNCTION, func);
+}
+void turna::CurlWrapper::setWritePointer(void * pointer){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_WRITEDATA, pointer);
 }
