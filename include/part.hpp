@@ -8,6 +8,7 @@ namespace turna {
     class Part{
         public:
             Part(RangeType range,std::filesystem::path path);
+            ~Part();
             std::fstream* getStream();
             void deleteFile();
             std::filesystem::path getPath();

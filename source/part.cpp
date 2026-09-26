@@ -9,6 +9,9 @@ turna::Part::Part(RangeType range,std::filesystem::path path)
 ,stream(path , std::ios::app  | std::ios::binary){
 
 }
+turna::Part::~Part(){
+    this->stream.close();
+}
 void turna::Part::deleteFile(){
     std::filesystem::remove(this->path);
 }
