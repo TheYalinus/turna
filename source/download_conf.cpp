@@ -6,6 +6,6 @@ complex(true), url(json.at("url")), contentType(json.at("contentType")), origina
 {
 
 }
-turna::DownloadConf::DownloadConf(const std::string& url , unsigned int part_count){
+turna::DownloadConf::DownloadConf(const std::string& url , unsigned int part_count):complex(true){
 
 }

@@ -1,6 +1,9 @@
 #ifndef INSTANCE_CONF_HPP
 #define INSTANCE_CONF_HPP
-class InstanceConf{
+namespace turna {
+    class InstanceConf{
 
-};
+    };
+}
+
 #endif
