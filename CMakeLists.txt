@@ -68,6 +68,7 @@ packageProject(
   INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
   INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
+  DEPENDENCIES "nlohmann::json 3.12.0 , curl 8.22.0"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE curl nlohmann_json::nlohmann_json )
 add_subdirectory(examples)

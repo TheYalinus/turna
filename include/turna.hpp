@@ -5,5 +5,6 @@
 #include "exceptions.hpp"
 #include "share_wrapper.hpp"
 #include "part.hpp"
-
+#include "utils.hpp"
+#include "download_conf.hpp"
 #endif
