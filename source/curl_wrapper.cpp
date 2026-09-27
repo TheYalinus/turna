@@ -14,11 +14,12 @@ turna::CurlWrapper::CurlWrapper(bool keep_connection, bool curl_verbose):Curl(cu
     if(curl_verbose)
         this->setCurlVerbose();
 }
-void turna::CurlWrapper::setFollowRedirects(bool option){
+turna::CurlWrapper& turna::CurlWrapper::setFollowRedirects(bool option){
     if(option)
         curl_easy_setopt(this->Curl.get(),CURLOPT_FOLLOWLOCATION,1L);
     else
         curl_easy_setopt(this->Curl.get(),CURLOPT_FOLLOWLOCATION,0L);
+    return *this;
 }
 turna::curlReturnType turna::CurlWrapper::executeCurl(){
     curlReturnType result;
@@ -26,53 +27,65 @@ turna::curlReturnType turna::CurlWrapper::executeCurl(){
     curl_easy_getinfo(this->getRawCurl(), CURLINFO_RESPONSE_CODE, &result.second);
     return result;
 }
-void turna::CurlWrapper::setUrl(const std::string& url){
+turna::CurlWrapper& turna::CurlWrapper::setUrl(const std::string& url){
     curl_easy_setopt(this->Curl.get(),CURLOPT_URL,url.c_str());
+    return *this;
 }
-void turna::CurlWrapper::setHeaderOnly(bool option){
+turna::CurlWrapper& turna::CurlWrapper::setHeaderOnly(bool option){
     if(option)
         curl_easy_setopt(this->Curl.get(), CURLOPT_NOBODY, 1L);
     else
         curl_easy_setopt(this->Curl.get(), CURLOPT_NOBODY, 0L);
+    return *this;
 }
-void turna::CurlWrapper::setCurlVerbose(bool option){
+turna::CurlWrapper& turna::CurlWrapper::setCurlVerbose(bool option){
     if(option)
         curl_easy_setopt(this->Curl.get(), CURLOPT_VERBOSE, 1L);
     else
         curl_easy_setopt(this->Curl.get(), CURLOPT_VERBOSE, 0L);
+    return *this;
 }
-void turna::CurlWrapper::setRange(const turna::RangeType& range){
+turna::CurlWrapper& turna::CurlWrapper::setRange(const turna::RangeType& range){
     curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, range.getCurlRange().c_str());
+    return *this;
 }
-void turna::CurlWrapper::setUsrAgent(const std::string& user_agent){
+turna::CurlWrapper& turna::CurlWrapper::setUsrAgent(const std::string& user_agent){
     curl_easy_setopt(this->Curl.get(), CURLOPT_USERAGENT, user_agent.c_str());
+    return *this;
 }
-void turna::CurlWrapper::setShareHandle(CURLSH * share_handle){
+turna::CurlWrapper& turna::CurlWrapper::setShareHandle(CURLSH * share_handle){
     curl_easy_setopt(this->Curl.get(), CURLOPT_SHARE, share_handle);
+    return *this;
 }
-void turna::CurlWrapper::setKeepConnection(bool option){
+turna::CurlWrapper& turna::CurlWrapper::setKeepConnection(bool option){
     if(option)
         curl_easy_setopt(this->Curl.get(), CURLOPT_TCP_KEEPALIVE, 1L);
     else
         curl_easy_setopt(this->Curl.get(), CURLOPT_TCP_KEEPALIVE, 0L);
+    return *this;
 }
-void turna::CurlWrapper::setProgress(bool option){
+turna::CurlWrapper& turna::CurlWrapper::setProgress(bool option){
     if(option)
         curl_easy_setopt(this->getRawCurl(), CURLOPT_NOPROGRESS, 0L);
     else
         curl_easy_setopt(this->getRawCurl(), CURLOPT_NOPROGRESS, 1L);
+    return *this;
 }
-void turna::CurlWrapper::setProxy(const std::string& proxy){
+turna::CurlWrapper& turna::CurlWrapper::setProxy(const std::string& proxy){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, proxy.c_str());
+    return *this;
 }
-void turna::CurlWrapper::setProxyPassword(const std::string& password){
+turna::CurlWrapper& turna::CurlWrapper::setProxyPassword(const std::string& password){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYPASSWORD, password.c_str());
+    return *this;
 }
-void turna::CurlWrapper::setProxyUsername(const std::string& username){
+turna::CurlWrapper& turna::CurlWrapper::setProxyUsername(const std::string& username){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXYUSERNAME, username.c_str());
+    return *this;
 }
-void turna::CurlWrapper::disableProxy(){
+turna::CurlWrapper& turna::CurlWrapper::disableProxy(){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_PROXY, "");
+    return *this;
 }
 CURL * turna::CurlWrapper::getRawCurl(){
     return this->Curl.get();
@@ -97,9 +110,11 @@ struct curl_header turna::CurlWrapper::getHeader(const std::string& value){
     curl_easy_header(this->getRawCurl(), value.c_str(), 0, CURLH_HEADER, -1, &data);
     return *data;
 }
-void turna::CurlWrapper::setWriteFunction(size_t(*func)(char* ,size_t, size_t ,void *)){
+turna::CurlWrapper& turna::CurlWrapper::setWriteFunction(size_t(*func)(char* ,size_t, size_t ,void *)){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_WRITEFUNCTION, func);
+    return *this;
 }
-void turna::CurlWrapper::setWritePointer(void * pointer){
+turna::CurlWrapper& turna::CurlWrapper::setWritePointer(void * pointer){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_WRITEDATA, pointer);
+    return *this;
 }
