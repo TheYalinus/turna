@@ -1,8 +1,11 @@
 #ifndef INSTANCE_CONF_HPP
 #define INSTANCE_CONF_HPP
+#include <string>
 namespace turna {
-    class InstanceConf{
-
+    struct InstanceConf{
+        std::string dns;
+        std::string proxy;
+        unsigned int connection_count;
     };
 }
 

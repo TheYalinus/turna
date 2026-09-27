@@ -7,4 +7,5 @@
 #include "part.hpp"
 #include "utils.hpp"
 #include "download_conf.hpp"
+#include "connection_pool.hpp"
 #endif
