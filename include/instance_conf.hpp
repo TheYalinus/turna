@@ -5,6 +5,7 @@ namespace turna {
     struct InstanceConf{
         std::string dns;
         std::string proxy;
+        std::string user_agent;
         unsigned int connection_count;
     };
 }

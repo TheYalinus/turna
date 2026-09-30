@@ -90,7 +90,7 @@ turna::CurlWrapper& turna::CurlWrapper::disableProxy(){
 CURL * turna::CurlWrapper::getRawCurl(){
     return this->Curl.get();
 }
-long turna::CurlWrapper::getTotalSize(){
+unsigned long turna::CurlWrapper::getTotalSize(){
     curl_off_t total_size_buffer = 0;
     curl_easy_getinfo(this->getRawCurl(), CURLINFO_CONTENT_LENGTH_DOWNLOAD_T,&total_size_buffer);
     return total_size_buffer;

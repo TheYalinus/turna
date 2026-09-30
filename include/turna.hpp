@@ -8,4 +8,5 @@
 #include "utils.hpp"
 #include "download_conf.hpp"
 #include "connection_pool.hpp"
+#include "gather_info.hpp"
 #endif

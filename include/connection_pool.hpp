@@ -4,7 +4,7 @@
 #include "instance_conf.hpp"
 #include "share_wrapper.hpp"
 #include <condition_variable>
-#include <mutex>
+#include <memory>
 #include <shared_mutex>
 #include <vector>
 namespace turna {
@@ -14,7 +14,7 @@ namespace turna {
         private:
             std::shared_mutex wait_mutex;
             std::condition_variable cv;
-            std::vector<CurlWrapper> curlObjects;
+            std::vector<std::shared_ptr<CurlWrapper>> curlObjects;
             struct InstanceConf instanceConf;
             ShareWrapper shareObject;
     };

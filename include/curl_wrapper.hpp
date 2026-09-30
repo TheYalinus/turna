@@ -37,7 +37,7 @@ namespace turna {
             CurlWrapper& resetAttributes();
             CURL * getRawCurl();
             std::string getEffectiveUrl();
-            long getTotalSize();
+            unsigned long getTotalSize();
             struct curl_header getHeader(const std::string& value);
             curlReturnType executeCurl();
 

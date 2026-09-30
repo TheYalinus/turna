@@ -2,15 +2,22 @@
 #define DOWNLOAD_CONF_HPP
 
 #include <nlohmann/json.hpp>
+#include <string>
+#include <string_view>
 namespace turna {
     class DownloadConf{
         public:
-            DownloadConf(nlohmann::json json);
-            DownloadConf(const std::string& url, unsigned int partCount);
-            DownloadConf(const std::string& url);
+            DownloadConf(std::string_view url);
+            DownloadConf(nlohmann::json::value_type);
+        protected:
+            std::string url;
+    };
+    class DownloadConfComplex:public DownloadConf{
+        public:
+            DownloadConfComplex(nlohmann::json json);
+            DownloadConfComplex(unsigned int partCount, std::string_view url,  std::string_view contentType , std::string_view originalFileName, std::string_view originalFileExtension , unsigned long originalFileSize);
         private:
-            bool complex;
-            std::string url, contentType , originalFileName , originalFileExtension;
+            std::string contentType , originalFileName , originalFileExtension;
             unsigned long originalFileSize , partSize , partSizeRemainder;
             unsigned int partCount;
     };
