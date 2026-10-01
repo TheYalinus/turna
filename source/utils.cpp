@@ -6,3 +6,6 @@ size_t turna::writeFunctionStream(char* data,size_t size, size_t nmemb,void *cli
     stream->flush();
     return nmemb;
 }
+size_t turna::ignoreWriteStream(char* data,size_t size, size_t nmemb,void *clientp){
+    return nmemb;
+}

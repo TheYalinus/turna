@@ -5,18 +5,34 @@
 #include "share_wrapper.hpp"
 #include <condition_variable>
 #include <memory>
-#include <shared_mutex>
+#include <mutex>
 #include <vector>
+#include <stack>
 namespace turna {
     class ConnectionPool{
         public:
-            ConnectionPool(std::string & url, InstanceConf & instanceConf);
+            ConnectionPool(const std::string & url, const InstanceConf &instanceConf);
         private:
-            std::shared_mutex wait_mutex;
+            //https://stackoverflow.com/a/27837534
+            struct ExternalDeleter{
+                public:
+                    explicit ExternalDeleter(std::weak_ptr<ConnectionPool* > pool);
+                    void operator() (CurlWrapper * ptr);
+                private:
+                    std::weak_ptr<ConnectionPool* > pool_;
+            };
+            std::mutex wait_mutex;
             std::condition_variable cv;
-            std::vector<std::shared_ptr<CurlWrapper>> curlObjects;
             struct InstanceConf instanceConf;
-            ShareWrapper shareObject;
+            class ShareWrapper shareObject;
+            std::shared_ptr<ConnectionPool *> this_ptr_;
+            std::stack<std::unique_ptr<CurlWrapper>>pool_;
+        protected:
+            void notifyOne();
+        public:
+            using ptrType = std::unique_ptr<CurlWrapper ,ExternalDeleter>;
+            void add(std::unique_ptr<CurlWrapper> wrapper);
+            ptrType acquireCurlWrapper();
     };
 }
 #endif

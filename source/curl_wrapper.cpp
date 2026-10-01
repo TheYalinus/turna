@@ -118,3 +118,7 @@ turna::CurlWrapper& turna::CurlWrapper::setWritePointer(void * pointer){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_WRITEDATA, pointer);
     return *this;
 }
+turna::CurlWrapper& turna::CurlWrapper::setDNS(const std::string & dns){
+    curl_easy_setopt(this->getRawCurl(), CURLOPT_DNS_SERVERS, dns.c_str());
+    return *this;
+}

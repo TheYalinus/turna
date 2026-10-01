@@ -8,7 +8,6 @@ namespace turna {
     class DownloadConf{
         public:
             DownloadConf(std::string_view url);
-            DownloadConf(nlohmann::json::value_type);
         protected:
             std::string url;
     };

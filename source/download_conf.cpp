@@ -1,6 +1,9 @@
 #include "download_conf.hpp"
 #include <string_view>
-turna::DownloadConfComplex::DownloadConfComplex(nlohmann::json json): DownloadConf(json.at("url")), contentType(json.at("contentType")), originalFileName(json.at("originalFileName"))
+turna::DownloadConf::DownloadConf(std::string_view url):url(url){
+
+}
+turna::DownloadConfComplex::DownloadConfComplex(nlohmann::json json): DownloadConf(std::string(json.at("url"))), contentType(json.at("contentType")), originalFileName(json.at("originalFileName"))
 ,originalFileExtension(json.at("originalFileExtension")), originalFileSize(json.at("originalFileSize")), partSize(json.at("def_partSize")), partSizeRemainder(json.at("def_remainder"))
 ,partCount(json.at("partCount"))
 {
