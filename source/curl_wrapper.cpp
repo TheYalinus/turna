@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <vector>
 turna::CurlWrapper::CurlWrapper(bool keep_connection, bool curl_verbose):Curl(curl_easy_init(), curl_easy_cleanup){
     if(keep_connection)
         this->setKeepConnection(true);
@@ -120,5 +121,15 @@ turna::CurlWrapper& turna::CurlWrapper::setWritePointer(void * pointer){
 }
 turna::CurlWrapper& turna::CurlWrapper::setDNS(const std::string & dns){
     curl_easy_setopt(this->getRawCurl(), CURLOPT_DNS_SERVERS, dns.c_str());
+    return *this;
+}
+turna::CurlWrapper& turna::CurlWrapper::setDNS(const std::vector<std::string >& dnsList){
+    std::string list= "";
+    for(int i =0 ; i<dnsList.size() ; i++){
+        if(i==dnsList.size()-1)
+            list= list + dnsList.at(i);
+        else
+            list= list + dnsList.at(i) + ",";
+    }
     return *this;
 }

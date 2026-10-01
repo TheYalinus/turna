@@ -33,6 +33,11 @@ VERSION 3.12.0
 URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
 
 CPMAddPackage(
+NAME picosha2
+URL https://github.com/okdshin/PicoSHA2/archive/refs/tags/v1.0.1.tar.gz
+VERSION 1.0.1)
+
+CPMAddPackage(
 NAME curl
 URL https://github.com/curl/curl/releases/download/curl-8_22_0/curl-8.22.0.zip
 OPTIONS "BUILD_CURL_EXE OFF" " BUILD_EXAMPLES OFF"  "BUILD_LIBCURL_DOCS OFF" " BUILD_MISC_DOCS OFF"
@@ -68,7 +73,7 @@ packageProject(
   INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
   INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
-  DEPENDENCIES "nlohmann::json 3.12.0 , curl 8.22.0"
+  DEPENDENCIES "nlohmann::json 3.12.0 , curl 8.22.0, picosha2 1.0.1"
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE curl nlohmann_json::nlohmann_json )
+target_link_libraries(${PROJECT_NAME} PRIVATE curl nlohmann_json::nlohmann_json picosha2 )
 add_subdirectory(examples)

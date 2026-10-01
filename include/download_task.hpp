@@ -5,14 +5,13 @@
 #include <vector>
 namespace turna {
     class DownloadTask{
-        public:
-            DownloadTask(DownloadConf DownloadConfig , InstanceConf InstanceConf);
         private:
             DownloadConf downloadConfig;
             InstanceConf instanceConfig;
+        protected:
+            DownloadTask(DownloadConf DownloadConfig , InstanceConf InstanceConf);
             virtual void finalize()=0;
-            virtual void checkSumSha256();
-            virtual void checkSumMd5();
+            bool checkSumSha256();
     };
 }
 #endif

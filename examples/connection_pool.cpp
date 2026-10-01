@@ -1,9 +1,6 @@
-
-
 #include "turna.hpp"
 #include <chrono>
 #include <thread>
-
 int main(){
     //Create a connetion pool object, that initalizes curl connections instantly
     //All the connections in the pool uses the same DNS cache, so the url is once time resolved
