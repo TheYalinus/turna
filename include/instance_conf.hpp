@@ -4,11 +4,11 @@
 #include <string>
 namespace turna {
     struct InstanceConf{
-        std::string dns;
-        std::string proxy;
-        std::string user_agent;
-        unsigned int connection_count;
-        std::filesystem::path final_location;
+        std::string dns = "";
+        std::string proxy= "";
+        std::string user_agent= "";
+        unsigned int connection_count =1 ;
+        std::filesystem::path final_location=  std::filesystem::current_path();
     };
 }
 

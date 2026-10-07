@@ -3,7 +3,7 @@
 #include "exceptions.hpp"
 #include <chrono>
 #include <thread>
-turna::DownloadConfComplex turna::gatherData(turna::CurlWrapper & Curl, std::string & url , unsigned int partCount){
+turna::DownloadConf turna::gatherData(turna::CurlWrapper & Curl, const std::string & url , unsigned int partCount){
     try {
     return _gatherHeadMethod(Curl, url, partCount);
     } catch (HeaderRejectedError) {
@@ -11,18 +11,18 @@ turna::DownloadConfComplex turna::gatherData(turna::CurlWrapper & Curl, std::str
         return _gatherGetMethod(Curl, url, partCount);
     }
 }
-turna::DownloadConfComplex turna::_gatherHeadMethod(turna::CurlWrapper & Curl, std::string & url,  unsigned int partCount){
+turna::DownloadConf turna::_gatherHeadMethod(turna::CurlWrapper & Curl, const std::string & url,  unsigned int partCount){
     Curl.setHeaderOnly();
     Curl.setUrl(url);
-    if (auto [cc , httpcode]= Curl.executeCurl(); cc != CURLE_OK || httpcode != 200 ) {
+    if (auto [cc , httpcode]= Curl.executeCurl(); cc != CURLE_OK || (httpcode != 206 && httpcode != 200) ) {
         throw HeaderRejectedError("Server rejected header response");
     }
     auto effectiveUrl = Curl.getEffectiveUrl();
     auto filename=  effectiveUrl.substr(effectiveUrl.find_last_of("/")+1,(effectiveUrl.find('?')-(effectiveUrl.find_last_of("/")))-1);
     auto fileext= effectiveUrl.substr(effectiveUrl.find_last_of(".")+1);
-    return {partCount ,url, Curl.getHeader("Content-Type").value , filename , fileext , Curl.getTotalSize() };
+    return DownloadConf::NewComplexConf(partCount ,url, Curl.getHeader("Content-Type").value , filename , fileext , Curl.getTotalSize() , true);
 }
-turna::DownloadConfComplex turna::_gatherGetMethod(turna::CurlWrapper & Curl, std::string & url ,unsigned int partCount){
+turna::DownloadConf turna::_gatherGetMethod(turna::CurlWrapper & Curl, const std::string & url ,unsigned int partCount){
     Curl.setHeaderOnly(false);
     Curl.setUrl(url);
     Curl.setWriteFunction(turna::_dummyWriteCallback);
@@ -32,7 +32,7 @@ turna::DownloadConfComplex turna::_gatherGetMethod(turna::CurlWrapper & Curl, st
     auto effectiveUrl = Curl.getEffectiveUrl();
     auto filename=  effectiveUrl.substr(effectiveUrl.find_last_of("/")+1,(effectiveUrl.find('?')-(effectiveUrl.find_last_of("/")))-1);
     auto fileext= effectiveUrl.substr(effectiveUrl.find_last_of(".")+1);
-    return {partCount , url, Curl.getHeader("Content-Type").value , filename , fileext , Curl.getTotalSize() };
+    return DownloadConf::NewComplexConf(partCount , url, Curl.getHeader("Content-Type").value , filename , fileext , Curl.getTotalSize(), false );
 }
 size_t turna::_dummyWriteCallback(char *data, size_t size, size_t nmemb, void *clientp){
     return -1;

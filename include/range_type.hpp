@@ -9,7 +9,11 @@ namespace turna {
             RangeType();
             RangeType(std::string_view a, std::string_view b);
             RangeType(unsigned long a , unsigned long b);
-            RangeType(std::string range_string);
+            RangeType(std::string_view range_string);
+            void setFirst(std::string_view first);
+            void setFirst(unsigned long first);
+            void setSecond(std::string_view second);
+            void setSecond(unsigned long second);
             std::string getCurlRange() const;
     };
 }

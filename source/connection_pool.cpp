@@ -12,7 +12,9 @@ turna::ConnectionPool::ConnectionPool(const std::string & url , const InstanceCo
     for (int i =0 ; i< this->instanceConf.connection_count; i++ ){
         //curlObjects.push_back(CurlWrapper().setUrl(url).setUsrAgent(instanceConf.user_agent).setDNS(instanceConf.dns).setKeepConnection(true).setShareHandle(shareObject.getSharePtr()).setCurlVerbose());
         pool_.emplace(std::make_unique<CurlWrapper>());
-        pool_.top()->setUrl(url).setUsrAgent(instanceConf.user_agent).setDNS(instanceConf.dns).setKeepConnection(true).setShareHandle(shareObject.getSharePtr()).setCurlVerbose().setRange({"0","1"}).setWriteFunction(turna::ignoreWriteStream);
+        if(!instanceConf.dns.empty())
+            pool_.top()->setDNS(instanceConf.dns);
+        pool_.top()->setUrl(url).setUsrAgent(instanceConf.user_agent).setKeepConnection(true).setShareHandle(shareObject.getSharePtr()).setCurlVerbose().setRange({"0","1"}).setWriteFunction(turna::ignoreWriteStream);
         pool_.top()->executeCurl();
     }
 
