@@ -3,6 +3,7 @@
 #include "range_type.hpp"
 #include <filesystem>
 #include <fstream>
+#include "curl_wrapper.hpp"
 #include <string>
 namespace turna {
     class Part{
@@ -14,6 +15,7 @@ namespace turna {
             std::filesystem::path getPath();
             std::string getPathString();
             unsigned long getFileSize();
+            void downloadPart(turna::CurlWrapper * cw);
         private:
             RangeType range;
             std::filesystem::path path;

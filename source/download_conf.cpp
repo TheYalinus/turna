@@ -104,3 +104,6 @@ void turna::DownloadConf::saveTo(std::filesystem::path){
 unsigned long turna::DownloadConf::getPartSize(){
     return this->partSize;
 }
+std::vector<turna::partData> * turna::DownloadConf::getPartsData(){
+    return &this->parts;
+}

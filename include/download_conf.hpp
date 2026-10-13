@@ -25,6 +25,7 @@ namespace turna {
             std::string getSHASig();
             std::string getContentType();
             void saveTo(std::filesystem::path);
+            std::vector<turna::partData> * getPartsData();
         protected:
             DownloadConf(nlohmann::json json);
             DownloadConf(unsigned int partCount, std::string_view url,  std::string_view contentType , std::string_view originalFileName, std::string_view originalFileExtension , unsigned long originalFileSize,bool complex, bool header, std::string_view sha256="");

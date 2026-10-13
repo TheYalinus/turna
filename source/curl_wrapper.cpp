@@ -47,7 +47,13 @@ turna::CurlWrapper& turna::CurlWrapper::setCurlVerbose(bool option){
     return *this;
 }
 turna::CurlWrapper& turna::CurlWrapper::setRange(const turna::RangeType& range){
-    curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, range.getCurlRange().c_str());
+    if(range.getCurlRange().empty()){
+        curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, NULL);
+    }
+    else {
+        curl_easy_setopt(this->Curl.get(), CURLOPT_RANGE, range.getCurlRange().c_str());
+    }
+
     return *this;
 }
 turna::CurlWrapper& turna::CurlWrapper::setUsrAgent(const std::string& user_agent){

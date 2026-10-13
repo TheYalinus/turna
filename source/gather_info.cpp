@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 turna::DownloadConf turna::gatherData(turna::CurlWrapper & Curl, const std::string & url , unsigned int partCount){
+    Curl.setRange({"",""});
     try {
     return _gatherHeadMethod(Curl, url, partCount);
     } catch (HeaderRejectedError) {

@@ -1,6 +1,9 @@
 #include "part.hpp"
+#include "curl_wrapper.hpp"
 #include "range_type.hpp"
+#include "utils.hpp"
 #include <filesystem>
+
 #include <fstream>
 #include <ios>
 turna::Part::Part(RangeType range,std::filesystem::path path)
@@ -26,4 +29,11 @@ unsigned long turna::Part::getFileSize(){
 }
 std::fstream* turna::Part::getStream(){
     return &this->stream;
+}
+void turna::Part::downloadPart(turna::CurlWrapper * cw){
+    cw->setHeaderOnly(false);
+    cw->setWriteFunction(writeFunctionStream);
+    cw->setWritePointer(this->getStream());
+    cw->setRange(this->range);
+    cw->executeCurl();
 }
