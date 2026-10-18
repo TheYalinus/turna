@@ -4,6 +4,7 @@
 #include <string_view>
 #include <utility>
 namespace turna {
+    //TODO : convert range type into pair<unsigned long,unsigned long>
     class RangeType : protected std::pair<std::string, std::string>{
         public:
             RangeType();
@@ -11,8 +12,10 @@ namespace turna {
             RangeType(unsigned long a , unsigned long b);
             RangeType(std::string_view range_string);
             void setFirst(std::string_view first);
+            unsigned long getFirst();
             void setFirst(unsigned long first);
             void setSecond(std::string_view second);
+            unsigned long getSecond();
             void setSecond(unsigned long second);
             std::string getCurlRange() const;
     };

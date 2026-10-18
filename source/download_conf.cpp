@@ -1,7 +1,10 @@
 #include "download_conf.hpp"
 #include "nlohmann/json_fwd.hpp"
+#include "range_type.hpp"
 #include "utils.hpp"
 #include <filesystem>
+#include <fstream>
+#include <iomanip>
 #include <string>
 #include <string_view>
 
@@ -18,7 +21,15 @@ turna::DownloadConf::DownloadConf(nlohmann::json json): url(json.at("url")),sha2
 ,originalFileExtension(json.at("originalFileExtension")), originalFileSize(json.at("originalFileSize")), partSize(json.at("def_partSize")), partSizeRemainder(json.at("def_remainder")),complex(true)
 ,partCount(json.at("partCount"))
 {
-
+    for (auto part: json["parts"]){
+        std::string range =part["pRange"];
+        this->parts.push_back({
+            RangeType(range),
+            part["pSize"],
+            part["pId"],
+            part["pFileName"]
+        });
+    }
 }
 turna::DownloadConf::DownloadConf( unsigned int partCount, std::string_view url, std::string_view contentType , std::string_view originalFileName, std::string_view originalFileExtension , unsigned long originalFileSize,bool complex,bool header, std::string_view sha256):
 url(url),sha256(sha256), partCount(partCount), contentType(contentType) ,originalFileSize(originalFileSize), originalFileExtension(originalFileExtension), originalFileName(originalFileName), partSize(originalFileSize / partCount), partSizeRemainder(originalFileSize %partSize) , complex(complex), header(header){
@@ -85,7 +96,7 @@ unsigned long turna::DownloadConf::getOriginalFileSize(){
 unsigned long turna::DownloadConf::getPartSizeRemainder(){
     return this->partSizeRemainder;
 }
-void turna::DownloadConf::saveTo(std::filesystem::path){
+turna::DownloadConf& turna::DownloadConf::saveTo(std::filesystem::path path){
     nlohmann::json json;
     json["version"]="0.1.1";
     json["complex"]=is_complex();
@@ -100,10 +111,29 @@ void turna::DownloadConf::saveTo(std::filesystem::path){
     json["partCount"]=getPartCount();
     json["def_remainder"]=getPartSizeRemainder();
     json["def_partSize"]=getPartSize();
+    for(auto &part : *getPartsData()){
+        json["parts"][part.id]={};
+        json["parts"][part.id]["pSize"]= part.partSize;
+        json["parts"][part.id]["pFileName"]=part.fileName;
+        json["parts"][part.id]["pRange"]=part.range.getCurlRange();
+        json["parts"][part.id]["pId"]= part.id;
+    }
+    std::ofstream stream(path);
+    stream<<std::setw(4)<<json<<std::endl;
+    stream.close();
+    return *this;
+}
+turna::DownloadConf& turna::DownloadConf::setSHASig(std::string_view sha256){
+    this->sha256 = sha256;
+    return *this;
 }
 unsigned long turna::DownloadConf::getPartSize(){
     return this->partSize;
 }
 std::vector<turna::partData> * turna::DownloadConf::getPartsData(){
     return &this->parts;
+}
+turna::DownloadConf& turna::DownloadConf::changeUrl(std::string_view url){
+    this->url = url;
+    return *this;
 }

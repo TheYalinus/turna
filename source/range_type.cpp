@@ -30,3 +30,9 @@ void turna::RangeType::setSecond(std::string_view second){
 void turna::RangeType::setSecond(unsigned long second){
     this->second = std::to_string(second);
 }
+unsigned long turna::RangeType::getFirst(){
+    return stol(this->first);
+}
+unsigned long turna::RangeType::getSecond(){
+    return stol(this->second);
+}

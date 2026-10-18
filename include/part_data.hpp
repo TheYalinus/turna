@@ -7,6 +7,7 @@ namespace turna {
         unsigned long partSize;
         int id;
         std::string fileName;
+        bool isCompleted=false;
     };
 }
 #endif

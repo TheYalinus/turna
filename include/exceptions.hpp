@@ -28,7 +28,10 @@ namespace turna {
         public:
             using std::runtime_error::runtime_error;
     };
-
+    class BrokenUrlError : public std::runtime_error{
+        public:
+            using std::runtime_error::runtime_error;
+    };
 }
 
 #endif

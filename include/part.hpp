@@ -4,22 +4,28 @@
 #include <filesystem>
 #include <fstream>
 #include "curl_wrapper.hpp"
+#include <streambuf>
 #include <string>
 namespace turna {
     class Part{
         public:
-            Part(RangeType range,std::filesystem::path path);
+            Part(RangeType range,std::filesystem::path path,bool isCompleted);
             ~Part();
-            std::fstream* getStream();
+            std::ofstream* getWriteStream();
+            std::ifstream* getReadStream();
             void deleteFile();
             std::filesystem::path getPath();
             std::string getPathString();
             unsigned long getFileSize();
             void downloadPart(turna::CurlWrapper * cw);
+            bool exists();
+
         private:
             RangeType range;
             std::filesystem::path path;
-            std::fstream stream;
+            std::ofstream writeStream;
+            std::ifstream readStream;
+            bool isCompleted;
 
     };
 }

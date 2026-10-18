@@ -3,9 +3,11 @@
 #include "instance_conf.hpp"
 #include "share_wrapper.hpp"
 #include "utils.hpp"
+#include <chrono>
 #include <curl/curl.h>
 #include <memory>
 #include <shared_mutex>
+#include <thread>
 turna::ConnectionPool::ConnectionPool(const std::string & url , const InstanceConf  & instanceConf):shareObject(), instanceConf(instanceConf),this_ptr_(new ConnectionPool*(this)),pool_(){
     shareObject.setShare(CURL_LOCK_DATA_DNS);
     shareObject.setShare(CURL_LOCK_DATA_SSL_SESSION);
@@ -16,6 +18,7 @@ turna::ConnectionPool::ConnectionPool(const std::string & url , const InstanceCo
             pool_.top()->setDNS(instanceConf.dns);
         pool_.top()->setUrl(url).setUsrAgent(instanceConf.user_agent).setKeepConnection(true).setShareHandle(shareObject.getSharePtr()).setCurlVerbose().setRange({"0","1"}).setWriteFunction(turna::ignoreWriteStream);
         pool_.top()->executeCurl();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
 }
