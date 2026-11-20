@@ -3,12 +3,23 @@ cmake_minimum_required(VERSION 3.14...3.22)
 # ---- Export Compile Commands ----
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+
+
 # ---- Project ----
 project(
   turna
   VERSION 1.0
   LANGUAGES CXX
 )
+#---Options ---
+option(TURNA_COMPILE_EXAMPLES "Compile the examples provided in examples/ folder" ON)
+option(TURNA_BUILD_TESTS "Build tests" ON)
+#--- Compile Examples ---
+if(TURNA_COMPILE_EXAMPLES)
+    add_subdirectory(examples)
+else()
+endif()
+
 # ---- Include guards ----
 
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
@@ -83,4 +94,8 @@ packageProject(
   DEPENDENCIES "nlohmann::json 3.12.0 , curl 8.22.0"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE curl nlohmann_json::nlohmann_json)
-add_subdirectory(examples)
+
+#--- Build Tests ---
+if(TURNA_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

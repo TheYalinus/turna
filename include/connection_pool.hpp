@@ -14,6 +14,7 @@ namespace turna {
             ConnectionPool(const std::string & url, const InstanceConf &instanceConf);
         private:
             //https://stackoverflow.com/a/27837534
+            // directly copied mechanism, it works
             struct ExternalDeleter{
                 public:
                     explicit ExternalDeleter(std::weak_ptr<ConnectionPool* > pool);
